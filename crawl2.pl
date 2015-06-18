@@ -5,6 +5,7 @@ use warnings;
 use LWP::UserAgent;
 use WWW::Mechanize;
 
+
 my %uniqLinks;
 my $pageCount;
 my $imageCount;
@@ -53,7 +54,7 @@ sub mysub{
     
 }
 
-mysub("https://<sitename>");
+mysub($ARGV[0]);
 print $lfh "Pages: ".$pageCount."\n";
 print $ifh "Images: ".$imageCount."\n";
 print "Pages: ".$pageCount.". Images: ".$imageCount."\n";
