@@ -52,7 +52,7 @@ sub mysub{
     }
     
 }
-<
+
 mysub("https://<sitename>");
 print $lfh "Pages: ".$pageCount."\n";
 print $ifh "Images: ".$imageCount."\n";
