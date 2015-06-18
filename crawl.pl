@@ -25,7 +25,7 @@ sub mysub{
 	}
 }
 
-mysub("https://<sitename>/");
+mysub($ARGV[0]);
 print $counter;
 close $fh;
 
