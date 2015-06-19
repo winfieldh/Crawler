@@ -12,9 +12,9 @@ sub mysub{
 	my $base_url=$_[0];
 	my $mech = WWW::Mechanize->new(autocheck => 0);
 	$mech->get( $base_url );
-	my @links = $mech->links();
+	my @links = $mech->find_all_links();
 	for my $link ( @links ) {
-	    if (($link->url =~ /$base_url/) && !($uniqLinks{$link->url}) && !($link->url =~ /css|php|jpg|pdf|JPG|xml|\?/) && length($link->url)>27) {
+	if (($link->url =~ /$base_url.*/) && !($uniqLinks{$link->url}) && !($link->url =~ /css|php|jpg|pdf|JPG|xml|\?/) && length($link->url)>26) {
 	    	$uniqLinks{$link->url} = 1;
 	    	$counter++;
 	    	print $counter," ",$link->url,"\n";
