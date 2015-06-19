@@ -9,6 +9,9 @@ use WWW::Mechanize;
 my %uniqLinks;
 my $pageCount;
 my $imageCount;
+my $home_url = $ARGV[0];
+$home_url =~ s/\./\\./g;
+$home_url =~ s/\//\\\//g;
 
 my $linkfile = "links.txt";
 open(my $lfh, '>', $linkfile);
@@ -23,7 +26,7 @@ sub mysub{
     my @images = $mech->find_all_images();
     
     for my $link ( @images ) {
-        if (($link->url =~ /$base_url/) && !($uniqLinks{$link->url}) && length($link->url)>27) {
+        if (($link->url =~ /$home_url/) && !($uniqLinks{$link->url}) && length($link->url)>27) {
             $uniqLinks{$link->url} = 1;
             $imageCount++;
             my $imageLink = $link->url;
@@ -36,7 +39,7 @@ sub mysub{
         }
     }
     for my $link ( @links ) {
-        if (($link->url =~ /$base_url/) && !($uniqLinks{$link->url}) && !(lc $link->url =~ /png|css|jpg|JPG|xml|\?/)) {
+        if (($link->url =~ /$home_url/) && !($uniqLinks{$link->url}) && !(lc $link->url =~ /png|css|jpg|JPG|xml|\?/)) {
             $uniqLinks{$link->url} = 1;
             $pageCount++;
             print $pageCount," ",$link->url,"\n";
@@ -44,15 +47,9 @@ sub mysub{
             sleep(1);
             mysub($link->url);
         }
-#		elsif (($link->url =~ /$base_url/) && !($uniqLinks{$link->url}) && (lc $link->url =~ /\.png|\.jpg|\.pdf/) && length($link->url)>27){
-#		    $uniqLinks{$link->url} = 1;
-#	            $imageCount++;
-#	            print $imageCount," ",$link->url,"\n";
-#	            print $ifh $link->url,"\n";
-#		}
     }
-    
 }
+
 
 mysub($ARGV[0]);
 print $lfh "Pages: ".$pageCount."\n";
