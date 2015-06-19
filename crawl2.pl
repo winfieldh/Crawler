@@ -45,7 +45,7 @@ sub mysub{
     #increase image counter
     #write to link file
     for my $link ( @links ) {
-        if (($link->url =~ /$home_url/) && !($uniqLinks{$link->url}) && !(lc $link->url =~ /png|css|jpg|JPG|xml|\?/)) {
+        if (($link->url =~ /$home_url/) && !($uniqLinks{$link->url}) && !(lc $link->url =~ /\/feed\/|png|css|jpg|JPG|xml|\?/)) {
             $uniqLinks{$link->url} = 1;
             $pageCount++;
             print $pageCount," ",$link->url,"\n";
