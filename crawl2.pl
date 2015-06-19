@@ -1,14 +1,15 @@
 #!/usr/bin/perl
-# more git testing
+
 use strict;
 use warnings;
 use LWP::UserAgent;
 use WWW::Mechanize;
-
+$DB::deep = 500; 
 
 my %uniqLinks;
 my $pageCount;
 my $imageCount;
+#need to escape periods and forward slashes in given url for comparison purposes later on
 my $home_url = $ARGV[0];
 $home_url =~ s/\./\\./g;
 $home_url =~ s/\//\\\//g;
@@ -25,6 +26,9 @@ sub mysub{
     my @links = $mech->find_all_links();
     my @images = $mech->find_all_images();
     
+    #first grab all the image links on the page
+    #to make links more readable, scrape out wordpresses timthumb reference
+    #increase image count, write to stdout, write to imagefile
     for my $link ( @images ) {
         if (($link->url =~ /$home_url/) && !($uniqLinks{$link->url}) && length($link->url)>27) {
             $uniqLinks{$link->url} = 1;
@@ -34,18 +38,20 @@ sub mysub{
             $imageLink =~ s/&.*//;
             print $imageLink,"\n";
             print $ifh $imageLink,"\n";
-            #sleep(1);
-           # mysub($link->url);
         }
     }
+    #grab all links on page
+    #disregard images
+    #increase image counter
+    #write to link file
     for my $link ( @links ) {
         if (($link->url =~ /$home_url/) && !($uniqLinks{$link->url}) && !(lc $link->url =~ /png|css|jpg|JPG|xml|\?/)) {
             $uniqLinks{$link->url} = 1;
             $pageCount++;
             print $pageCount," ",$link->url,"\n";
             print $lfh $link->url,"\n";
-            sleep(1);
-            mysub($link->url);
+            sleep(1); #try to be nice to webserver
+            mysub($link->url); #recursively look at links on current page.
         }
     }
 }
