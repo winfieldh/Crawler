@@ -51,8 +51,9 @@ sub mysub{
     for my $link ( @links ) {
     	my $x = $link->url;
 		if ( $link->url !~ /$temp_url/ && $link->url !~ /http|www/){
-			$x = $temp_url.$link->url;
+			$x = $temp_url.'/'.$link->url; 
 		}
+	$x =~ s/edu\/\//edu\//g;
         if (($x =~ /$home_url/) && !($uniqLinks{$x}) && !(lc $x =~ /\/feed\/|png|mailto|css|ico|jpg|@|xml|\?/) && length($x)>$home_length) {
             $uniqLinks{$x} = 1;
             $pageCount++;
