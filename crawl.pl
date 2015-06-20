@@ -11,6 +11,7 @@ my $pageCount;
 my $imageCount;
 #need to escape periods and forward slashes in given url for comparison purposes later on
 my $home_url = $ARGV[0];
+my $temp_url = $home_url;
 my $home_length = length($home_url);
 $home_url =~ s/\./\\./g;
 $home_url =~ s/\//\\\//g;
@@ -48,13 +49,19 @@ sub mysub{
     #increase image counter
     #write to link file
     for my $link ( @links ) {
-        if (($link->url =~ /$home_url/) && !($uniqLinks{$link->url}) && !(lc $link->url =~ /\/feed\/|doc|png|css|jpg|xml|\?/) && length($link->url)>$home_length) {
-            $uniqLinks{$link->url} = 1;
+    	my $x = $link->url;
+		if ( $link->url !~ /$temp_url/ && $link->url !~ /http|www/){
+			$x = $temp_url.$link->url;
+		}
+        if (($x =~ /$home_url/) && !($uniqLinks{$x}) && !(lc $x =~ /\/feed\/|png|mailto|css|ico|jpg|@|xml|\?/) && length($x)>$home_length) {
+            $uniqLinks{$x} = 1;
             $pageCount++;
-            print $pageCount," ",$link->url,"\n";
-            print $lfh $link->url,"\n";
-            sleep(1); #try to be nice to webserver
-            mysub($link->url); #recursively look at links on current page.
+            print $pageCount," ",$x,"\n";
+            print $lfh $x,"\n";
+            #sleep(1); #try to be nice to webserver
+            if ($x !~ /pdf|doc|xls/){
+                mysub($x); #recursively look at links on current page.
+                }
         }
     }
 }
