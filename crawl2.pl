@@ -4,13 +4,14 @@ use strict;
 use warnings;
 use LWP::UserAgent;
 use WWW::Mechanize;
-$DB::deep = 500; 
+$DB::deep = 1000; 
 
 my %uniqLinks;
 my $pageCount;
 my $imageCount;
 #need to escape periods and forward slashes in given url for comparison purposes later on
 my $home_url = $ARGV[0];
+my $home_length = length($home_url);
 $home_url =~ s/\./\\./g;
 $home_url =~ s/\//\\\//g;
 
@@ -30,7 +31,7 @@ sub mysub{
     #to make links more readable, scrape out wordpresses timthumb reference
     #increase image count, write to stdout, write to imagefile
     for my $link ( @images ) {
-        if (($link->url =~ /$home_url/) && !($uniqLinks{$link->url}) && length($link->url)>27) {
+        if (($link->url =~ /$home_url/) && !($uniqLinks{$link->url}) && length($link->url)>$home_length) {
             $uniqLinks{$link->url} = 1;
             $imageCount++;
             my $imageLink = $link->url;
@@ -45,7 +46,7 @@ sub mysub{
     #increase image counter
     #write to link file
     for my $link ( @links ) {
-        if (($link->url =~ /$home_url/) && !($uniqLinks{$link->url}) && !(lc $link->url =~ /\/feed\/|png|css|jpg|JPG|xml|\?/)) {
+        if (($link->url =~ /$home_url/) && !($uniqLinks{$link->url}) && !(lc $link->url =~ /\/feed\/|doc|png|css|jpg|JPG|xml|\?/) && length($link->url)>$home_length) {
             $uniqLinks{$link->url} = 1;
             $pageCount++;
             print $pageCount," ",$link->url,"\n";
