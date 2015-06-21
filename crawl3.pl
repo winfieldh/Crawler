@@ -65,7 +65,7 @@ sub mysub{
             $uniqLinks{$x} = 1;
             $pageCount++;
             print $pageCount," ",$PNF,$x,"\n";
-            print $lfh $x,"\n";
+            print $lfh $PNF,$x,"\n";
             if ($x !~ /pdf|doc|xls/){
                 mysub($x); #recursively look at links on current page, if not pdf, doc, or xls.
                 }
