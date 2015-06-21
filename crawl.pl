@@ -50,17 +50,17 @@ sub mysub{
     #write to link file
     for my $link ( @links ) {
     	my $x = $link->url;
-#		if ( $link->url !~ /$temp_url/ && $link->url !~ /http|www/){
-#			$x = $temp_url.'/'.$link->url; 
-#		}
-#	$x =~ s/edu\/\//edu\//g;
+		if ( $link->url =~ /^\//){
+			$x = $temp_url.$link->url;
+		}
+
         if (($x =~ /$home_url/) && !($uniqLinks{$x}) && !(lc $x =~ /\/feed\/|png|mailto|css|ico|jpg|@|xml|\?/) && length($x)>$home_length) {
             $uniqLinks{$x} = 1;
             $pageCount++;
             print $pageCount," ",$x,"\n";
             print $lfh $x,"\n";
             #sleep(1); #try to be nice to webserver
-            if ($x !~ /pdf|doc|xls/){
+            if ($x !~ /\.pdf|\.doc|\.xls/){
                 mysub($x); #recursively look at links on current page.
                 }
         }
