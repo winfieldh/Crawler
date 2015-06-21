@@ -24,12 +24,18 @@ $imagefile =~ s/http.*://g;$imagefile =~ s/\///g;
 open(my $ifh, '>', $imagefile);
 
 sub mysub{
+	my $PNF;
     my $base_url=$_[0];
     my $mech = WWW::Mechanize->new(autocheck => 0);
     $mech->get( $base_url );
     my @links = $mech->find_all_links();
     my @images = $mech->find_all_images();
-    
+    my $pnf = $mech->title();
+    if ($pnf =~ /Page not found/){
+    	$PNF = " PNF ";
+    } else {
+    	$PNF = '';
+    }
     #first grab all the image links on the page
     #to make links more readable, scrape out wordpresses timthumb reference
     #increase image count, write to stdout, write to imagefile
@@ -58,7 +64,7 @@ sub mysub{
         if (($x =~ /$temp_url/) && !($uniqLinks{$x}) && !(lc $x =~ /\/feed\/|png|mailto|css|ico|jpg|@|xml|#|\?/) && length($x)>$home_length) {
             $uniqLinks{$x} = 1;
             $pageCount++;
-            print $pageCount," ",$x,"\n";
+            print $pageCount," ",$PNF,$x,"\n";
             print $lfh $x,"\n";
             if ($x !~ /pdf|doc|xls/){
                 mysub($x); #recursively look at links on current page, if not pdf, doc, or xls.
