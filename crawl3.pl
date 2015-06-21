@@ -33,7 +33,7 @@ sub mysub{
     #first grab all the image links on the page
     #to make links more readable, scrape out wordpresses timthumb reference
     #increase image count, write to stdout, write to imagefile
-    for my $link ( @images ) {
+    for my $link ( @images ) { 
     	
         if ($link->url && ($link->url =~ /$home_url/) && !($uniqLinks{$link->url}) && length($link->url)>$home_length) {
             $uniqLinks{$link->url} = 1;
