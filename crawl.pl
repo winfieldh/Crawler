@@ -50,7 +50,7 @@ sub mysub{
     #write to link file
     for my $link ( @links ) {
     	my $x = $link->url;
-		if ( $link->url =~ /^\//){
+		if ( $x =~ /^\// && $x !~ /http|www/){
 			$x = $temp_url.$link->url;
 		}
 
