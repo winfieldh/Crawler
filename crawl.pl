@@ -29,7 +29,6 @@ sub mysub{
     $mech->get( $base_url );
     my @links = $mech->find_all_links();
     my @images = $mech->find_all_images();
-    
     #first grab all the image links on the page
     #to make links more readable, scrape out wordpresses timthumb reference
     #increase image count, write to stdout, write to imagefile
@@ -48,23 +47,26 @@ sub mysub{
     #disregard images
     #increase image counter
     #write to link file
-    for my $link ( @links ) {
-    	my $x = $link->url;
-		if ( $x =~ /^\// && $x !~ /http|www/){
-			$x = $temp_url.$link->url;
-		}
-
-        if (($x =~ /$home_url/) && !($uniqLinks{$x}) && !(lc $x =~ /\/feed\/|png|mailto|css|ico|jpg|@|xml|\?/) && length($x)>$home_length) {
-            $uniqLinks{$x} = 1;
-            $pageCount++;
-            print $pageCount," ",$x,"\n";
-            print $lfh $x,"\n";
-            #sleep(1); #try to be nice to webserver
-            if ($x !~ /\.pdf|\.doc|\.xls/){
-                mysub($x); #recursively look at links on current page.
-                }
-        }
-    }
+    
+    	for my $link ( @links ) {
+	    	my $x = $link->url;
+			if ( $x =~ /^\// && $x !~ /http|www/){
+				$x = $temp_url.$link->url;
+			}
+	
+	        if (($x =~ /$home_url/) && !($uniqLinks{$x}) && !(lc $x =~ /\/feed\/|png|mailto|css|ico|jpg|@|xml|\?/) && length($x)>$home_length) {
+	            $uniqLinks{$x} = 1;
+	            $pageCount++;
+	           
+	            print $pageCount," ",$x,"\n";
+	            print $lfh $x,"\n";
+	            #sleep(1); #try to be nice to webserver
+	            if ($x !~ /\.pdf|\.doc|\.xls/){
+	                mysub($x); #recursively look at links on current page.
+	                }
+	        }
+	    }
+ 
 }
 
 
