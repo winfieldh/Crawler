@@ -60,8 +60,8 @@ sub mysub{
 		if ( $link->url !~ /$temp_url/ && $link->url !~ /http|www/){ #if a link appears with no base ref, add ours
 			$x = $temp_url.$link->url; 
 		}
-		$x =~ s/edu\/\//edu\//g;
-        if (($x =~ /$temp_url/) && !($uniqLinks{$x}) && !(lc $x =~ /\/feed\/|png|mailto|css|ico|jpg|@|xml|#|\?/) && length($x)>$home_length) {
+		$x =~ s/edu\/\//edu\//g;#\/feed\/
+        if (($x =~ /$temp_url/) && !($uniqLinks{$x}) && !(lc $x =~ /GetImage|png|mailto|css|ico|jpg|@|xml|#|\?/) && length($x)>$home_length) {
             $uniqLinks{$x} = 1;
             $pageCount++;
             print $pageCount," ",$PNF,$x,"\n";
