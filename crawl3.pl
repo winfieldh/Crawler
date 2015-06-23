@@ -24,13 +24,13 @@ $imagefile =~ s/http.*://g;$imagefile =~ s/\///g;
 open(my $ifh, '>', $imagefile);
 
 sub mysub{
-	my $PNF;
+	my $PNF;my $pnf;
     my $base_url=$_[0];
     my $mech = WWW::Mechanize->new(autocheck => 0);
     $mech->get( $base_url );
     my @links = $mech->find_all_links();
     my @images = $mech->find_all_images();
-    my $pnf = $mech->title();
+    $pnf = $mech->title();
     if ($pnf =~ /Page not found/){
     	$PNF = " PNF ";
     } else {
